@@ -1,5 +1,6 @@
 package pl.picubicu.sportsobjectsreservationsystem.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Builder
 @Data
 @Entity
 @Table(name = "Users")
