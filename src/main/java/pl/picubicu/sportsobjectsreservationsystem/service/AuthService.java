@@ -5,8 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.picubicu.sportsobjectsreservationsystem.dto.RegistrationRequestDto;
+import pl.picubicu.sportsobjectsreservationsystem.dto.UserResponseDto;
 import pl.picubicu.sportsobjectsreservationsystem.exception.UserAlreadyExistsException;
+import pl.picubicu.sportsobjectsreservationsystem.exception.UserMismatchPasswordException;
 import pl.picubicu.sportsobjectsreservationsystem.exception.UserNotActivatedException;
+import pl.picubicu.sportsobjectsreservationsystem.exception.UserNotFoundException;
 import pl.picubicu.sportsobjectsreservationsystem.model.Address;
 import pl.picubicu.sportsobjectsreservationsystem.model.User;
 import pl.picubicu.sportsobjectsreservationsystem.repository.AddressRepository;
@@ -15,9 +18,7 @@ import pl.picubicu.sportsobjectsreservationsystem.repository.UserRepository;
 import java.time.Instant;
 import java.util.Optional;
 
-import static pl.picubicu.sportsobjectsreservationsystem.message.SystemMessage.USER_ALREADY_EXISTS;
-import static pl.picubicu.sportsobjectsreservationsystem.message.SystemMessage.USER_CREATED;
-import static pl.picubicu.sportsobjectsreservationsystem.message.SystemMessage.USER_NOT_ACTIVATED;
+import static pl.picubicu.sportsobjectsreservationsystem.message.SystemMessage.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -53,4 +54,21 @@ public class AuthService {
         return USER_CREATED;
     }
 
+    public UserResponseDto signIn(String email, String password) {
+        Optional<User> foundUser = this.userRepository.findByEmail(email);
+        if (foundUser.isPresent()) {
+            User wantedUser = foundUser.get();
+            if (!wantedUser.getIsActivated()) {
+                log.warn(USER_NOT_ACTIVATED);
+                throw new UserNotActivatedException(USER_NOT_ACTIVATED);
+            }
+            if (this.bCryptPasswordEncoder.matches(password, wantedUser.getPassword())) {
+                return UserResponseDto.fromUser(wantedUser);
+            }
+            log.error(USER_CREDENTIALS_NOT_VALID);
+            throw new UserMismatchPasswordException(USER_CREDENTIALS_NOT_VALID);
+        }
+        log.warn(USER_NOT_FOUND);
+        throw new UserNotFoundException(USER_NOT_FOUND);
+    }
 }
