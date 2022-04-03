@@ -46,7 +46,6 @@ public class AuthService {
 
         User newUser = User.fromRegistrationDtoWithRole(registrationRequestDto, "CLIENT");
         newUser.setAddress(address);
-        newUser.setCreationDate(Instant.now());
         newUser.setPassword(bCryptPasswordEncoder
                 .encode(registrationRequestDto.getPassword()));
         userRepository.save(newUser);
