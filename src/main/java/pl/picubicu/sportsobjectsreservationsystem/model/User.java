@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import pl.picubicu.sportsobjectsreservationsystem.dto.RegistrationRequestDto;
 
 import javax.persistence.Entity;
@@ -41,6 +42,8 @@ public class User {
 
     private String email;
     private String password;
+
+    @CreationTimestamp
     private Instant creationDate;
     private String role;
     private Boolean isActivated;

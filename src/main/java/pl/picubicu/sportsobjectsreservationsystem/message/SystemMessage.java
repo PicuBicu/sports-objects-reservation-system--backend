@@ -7,4 +7,6 @@ public class SystemMessage {
     public final static String USER_LOGGED_SUCCESSFULLY = "User has been logged successfully";
     public final static String USER_NOT_FOUND = "User has not been found";
     public final static String USER_CREDENTIALS_NOT_VALID = "Your credentials are not valid";
+    public final static String USER_DELETED = "User has been deleted";
+    public final static String USER_ACTIVATION_STATUS_CHANGE = "User activation status has changed";
 }
