@@ -16,7 +16,7 @@ import static pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage.US
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("api/users")
+@RequestMapping("api/user")
 @RestController
 public class UserController {
 
