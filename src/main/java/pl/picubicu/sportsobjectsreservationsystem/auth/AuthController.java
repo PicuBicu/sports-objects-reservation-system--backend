@@ -23,9 +23,9 @@ public class AuthController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/sign-up")
-    public CustomResponse signUp(@Valid @RequestBody RegistrationRequestDto registrationRequestDto) {
-        log.info(registrationRequestDto.toString());
-        String message = this.authService.signUp(registrationRequestDto);
+    public CustomResponse signUp(@Valid @RequestBody RegistrationDto registrationDto) {
+        log.info(registrationDto.toString());
+        String message = this.authService.signUp(registrationDto);
         log.info(message);
         return new CustomResponse(message);
     }

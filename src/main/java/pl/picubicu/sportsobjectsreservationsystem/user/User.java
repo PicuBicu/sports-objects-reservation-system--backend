@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import pl.picubicu.sportsobjectsreservationsystem.auth.RegistrationRequestDto;
+import pl.picubicu.sportsobjectsreservationsystem.auth.RegistrationDto;
 import pl.picubicu.sportsobjectsreservationsystem.address.Address;
 import pl.picubicu.sportsobjectsreservationsystem.reservation.Reservation;
 
@@ -56,7 +56,7 @@ public class User {
     @OneToOne
     private Address address;
 
-    public static User fromRegistrationDtoWithRole(RegistrationRequestDto request, String role) {
+    public static User fromRegistrationDtoWithRole(RegistrationDto request, String role) {
         return User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())

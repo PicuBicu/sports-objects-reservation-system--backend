@@ -27,9 +27,9 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
 
-    public String signUp(RegistrationRequestDto registrationRequestDto) {
+    public String signUp(RegistrationDto registrationDto) {
 
-        Optional<User> foundUser = userRepository.findByEmail(registrationRequestDto.getEmail());
+        Optional<User> foundUser = userRepository.findByEmail(registrationDto.getEmail());
         if (foundUser.isPresent()) {
             if (!foundUser.get().getIsActivated()) {
                 log.warn(USER_NOT_ACTIVATED);
@@ -39,13 +39,13 @@ public class AuthService {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS);
         }
 
-        Address address = Address.fromRegistrationDto(registrationRequestDto);
+        Address address = Address.fromRegistrationDto(registrationDto);
         addressRepository.save(address);
 
-        User newUser = User.fromRegistrationDtoWithRole(registrationRequestDto, "CLIENT");
+        User newUser = User.fromRegistrationDtoWithRole(registrationDto, "CLIENT");
         newUser.setAddress(address);
         newUser.setPassword(bCryptPasswordEncoder
-                .encode(registrationRequestDto.getPassword()));
+                .encode(registrationDto.getPassword()));
         userRepository.save(newUser);
 
         return USER_CREATED;

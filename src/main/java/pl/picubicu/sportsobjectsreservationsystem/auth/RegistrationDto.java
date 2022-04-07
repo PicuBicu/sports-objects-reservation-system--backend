@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class RegistrationRequestDto {
+public class RegistrationDto {
     @NotBlank
     private String firstName;
     @NotBlank(message = "Last name cannot be empty")

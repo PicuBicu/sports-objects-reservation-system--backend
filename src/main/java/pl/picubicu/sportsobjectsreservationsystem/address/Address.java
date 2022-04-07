@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.picubicu.sportsobjectsreservationsystem.auth.RegistrationRequestDto;
+import pl.picubicu.sportsobjectsreservationsystem.auth.RegistrationDto;
 import pl.picubicu.sportsobjectsreservationsystem.sportobject.SportObjectDto;
 
 import javax.persistence.Entity;
@@ -31,7 +31,7 @@ public class Address {
     private String localNumber;
     private String cityName;
 
-    public static Address fromRegistrationDto(RegistrationRequestDto request) {
+    public static Address fromRegistrationDto(RegistrationDto request) {
         return Address.builder()
                 .streetName(request.getStreetName())
                 .streetNumber(request.getStreetNumber())
