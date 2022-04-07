@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.picubicu.sportsobjectsreservationsystem.dto.RegistrationRequestDto;
+import pl.picubicu.sportsobjectsreservationsystem.dto.SportObjectDto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,8 +18,8 @@ import javax.persistence.Table;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "address")
+@Entity(name = "Address")
+@Table(name = "addresses")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,15 @@ public class Address {
     private String cityName;
 
     public static Address fromRegistrationDto(RegistrationRequestDto request) {
+        return Address.builder()
+                .streetName(request.getStreetName())
+                .streetNumber(request.getStreetNumber())
+                .localNumber(request.getLocalNumber())
+                .cityName(request.getCityName())
+                .build();
+    }
+
+    public static Address fromSportObjectDto(SportObjectDto request) {
         return Address.builder()
                 .streetName(request.getStreetName())
                 .streetNumber(request.getStreetNumber())
