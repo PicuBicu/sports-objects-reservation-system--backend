@@ -3,10 +3,10 @@ package pl.picubicu.sportsobjectsreservationsystem.sportobject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.picubicu.sportsobjectsreservationsystem.category.CategoryNotFoundException;
 import pl.picubicu.sportsobjectsreservationsystem.address.Address;
-import pl.picubicu.sportsobjectsreservationsystem.category.Category;
 import pl.picubicu.sportsobjectsreservationsystem.address.AddressRepository;
+import pl.picubicu.sportsobjectsreservationsystem.category.Category;
+import pl.picubicu.sportsobjectsreservationsystem.category.CategoryNotFoundException;
 import pl.picubicu.sportsobjectsreservationsystem.category.CategoryRepository;
 
 import java.util.HashSet;
@@ -55,5 +55,13 @@ public class SportObjectService {
             return sportObject.get();
         }
         throw new SportObjectNotFoundException(String.format("Sport object with id %d has not been found", id));
+    }
+
+    public List<SportObject> getSportObjectsByCategoryId(Long id) {
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isPresent()) {
+            return sportObjectRepository.findSportObjectByCategoriesContaining(category.get());
+        }
+        throw new CategoryNotFoundException(String.format("There is no category with an id %d", id));
     }
 }
