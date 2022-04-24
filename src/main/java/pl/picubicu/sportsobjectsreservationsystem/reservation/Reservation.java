@@ -1,10 +1,13 @@
 package pl.picubicu.sportsobjectsreservationsystem.reservation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.picubicu.sportsobjectsreservationsystem.sportobject.SportObject;
 import pl.picubicu.sportsobjectsreservationsystem.user.User;
 
@@ -17,8 +20,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,14 +43,15 @@ public class Reservation {
     private ReservationStatus status;
 
     @CreationTimestamp
-    private Instant creationDate;
+    private LocalDateTime creationDate;
 
-    private Instant reservationDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime reservationDate;
 
     private Integer numOfUsers;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sport_object_id", referencedColumnName = "id", nullable = false)
     private SportObject sportObject;
-
 }
