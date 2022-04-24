@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.picubicu.sportsobjectsreservationsystem.custom.CustomResponse;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -26,10 +28,19 @@ public class SportObjectController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/")
-    public CustomResponse addSportObject(@RequestBody SportObjectDto sportObjectDto) {
+    public CustomResponse addSportObject(@Valid @RequestBody SportObjectDto sportObjectDto) {
         log.info(sportObjectDto.toString());
         String message = sportObjectService.addNewSportObject(sportObjectDto);
         log.info(message);
+        return new CustomResponse(message);
+    }
+
+    @PutMapping("/{id}")
+    public CustomResponse updateSportObject(@PathVariable Long id, @Valid @RequestBody SportObjectDto sportObjectDto) {
+        log.info("Update {}", sportObjectDto.toString());
+        sportObjectService.updateSportObjectById(id, sportObjectDto);
+        String message = String.format("Sport object with id %d has been updated", id);
+        log.info(message, id);
         return new CustomResponse(message);
     }
 

@@ -64,4 +64,25 @@ public class SportObjectService {
         }
         throw new CategoryNotFoundException(String.format("There is no category with an id %d", id));
     }
+
+    public void updateSportObjectById(Long id, SportObjectDto sportObjectDto) {
+        SportObject sportObj = sportObjectRepository.findById(id).map(sportObject -> {
+            sportObject.setName(sportObjectDto.getName());
+            sportObject.setImageName(sportObjectDto.getImageName());
+            sportObject.getAddress().setStreetName(sportObjectDto.getStreetName());
+            sportObject.getAddress().setLocalNumber(sportObjectDto.getLocalNumber());
+            sportObject.getAddress().setStreetNumber(sportObjectDto.getStreetNumber());
+            sportObject.getAddress().setCityName(sportObjectDto.getCityName());
+            List<Category> categories = categoryRepository.findAllById(sportObjectDto.getCategoriesIds());
+            if (categories.isEmpty()) {
+                throw new CategoryNotFoundException("There is not categories with given ids = " +
+                        sportObjectDto.getCategoriesIds());
+            }
+            sportObject.setCategories(new HashSet<>(categories));
+            return sportObject;
+        }).orElseThrow(() -> {
+            throw new SportObjectNotFoundException("Sport object with id " + id + " does not exits");
+        });
+        sportObjectRepository.save(sportObj);
+    }
 }
