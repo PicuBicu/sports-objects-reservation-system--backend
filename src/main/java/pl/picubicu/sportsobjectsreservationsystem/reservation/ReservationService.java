@@ -49,19 +49,27 @@ public class ReservationService {
             }
         }
 
-        ReservationStatus status = statusRepository.findByName("REQUESTED");
-
-        reservationRepository.save(Reservation.builder()
+        Optional<ReservationStatus> status = statusRepository.findByName("REQUESTED");
+        status.ifPresent(reservationStatus -> reservationRepository.save(Reservation.builder()
                 .reservationDate(reservationDto.getReservationDate())
                 .user(user.get())
-                .status(status)
+                .status(reservationStatus)
                 .numOfUsers(reservationDto.getNumOfUsers())
                 .sportObject(sportObject.get())
                 .build()
-        );
+        ));
     }
 
     private boolean isReservationBelongingToCurrentUser(User user, String email) {
         return user.getEmail().equals(email);
+    }
+
+    public void setReservationStatus(Long id, String status) {
+        Optional<Reservation> optReservation = reservationRepository.findById(id);
+        optReservation.ifPresentOrElse(reservation -> {
+            statusRepository.findByName(status).ifPresent(reservation::setStatus);
+        }, () -> {
+            throw new ReservationNotFound("There is no reservation with id " + id);
+        });
     }
 }
