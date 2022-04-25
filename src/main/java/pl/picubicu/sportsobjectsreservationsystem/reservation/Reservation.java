@@ -1,6 +1,8 @@
 package pl.picubicu.sportsobjectsreservationsystem.reservation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +24,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @Builder
 @Getter
 @Setter
@@ -37,11 +40,14 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @OneToOne(fetch = FetchType.EAGER)
     private ReservationStatus status;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
     private LocalDateTime creationDate;
 
