@@ -10,6 +10,8 @@ import pl.picubicu.sportsobjectsreservationsystem.user.User;
 import pl.picubicu.sportsobjectsreservationsystem.user.UserNotFoundException;
 import pl.picubicu.sportsobjectsreservationsystem.user.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -71,5 +73,14 @@ public class ReservationService {
         }, () -> {
             throw new ReservationNotFound("There is no reservation with id " + id);
         });
+    }
+
+    public List<Reservation> getUserReservations(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return reservationRepository.findByUserEmail(email);
+        } else {
+            throw new UserNotFoundException("User with email " + email + " does not exist");
+        }
     }
 }

@@ -3,6 +3,8 @@ package pl.picubicu.sportsobjectsreservationsystem.reservation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.picubicu.sportsobjectsreservationsystem.custom.CustomResponse;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,5 +39,11 @@ public class ReservationController {
         reservationService.setReservationStatus(id, status);
         log.info("Status of reservation with id {} has been set to {}", id, status);
         return new CustomResponse("New status of reservation with id " + id + " is " + status);
+    }
+
+    @GetMapping("/user/{email}")
+    public List<Reservation> getUserReservations(@PathVariable String email) {
+        log.info("Fetch reservation for {}", email);
+        return reservationService.getUserReservations(email);
     }
 }
