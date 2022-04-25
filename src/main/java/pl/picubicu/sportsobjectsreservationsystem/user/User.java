@@ -49,6 +49,8 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private String email;
+    
+    @JsonIgnore
     private String password;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

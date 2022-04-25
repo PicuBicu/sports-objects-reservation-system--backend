@@ -46,4 +46,10 @@ public class ReservationController {
         log.info("Fetch reservation for {}", email);
         return reservationService.getUserReservations(email);
     }
+
+    @GetMapping("/status/{statusName}")
+    public List<ReservationResponseDto> getReservationsWithStatus(@PathVariable String statusName) {
+        log.info("Fetch reservation with status {}", statusName);
+        return reservationService.getReservationsByStatus(statusName);
+    }
 }

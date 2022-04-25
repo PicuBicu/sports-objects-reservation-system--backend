@@ -13,6 +13,7 @@ import pl.picubicu.sportsobjectsreservationsystem.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -82,5 +83,16 @@ public class ReservationService {
         } else {
             throw new UserNotFoundException("User with email " + email + " does not exist");
         }
+    }
+
+    public List<ReservationResponseDto> getReservationsByStatus(String statusName) {
+        Optional<ReservationStatus> reservationStatus = statusRepository.findByName(statusName);
+        if (reservationStatus.isPresent()) {
+            return reservationRepository.findByStatusName(statusName)
+                    .stream()
+                    .map(ReservationResponseDto::fromReservation)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 }

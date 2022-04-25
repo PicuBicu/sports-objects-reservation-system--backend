@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     Optional<Reservation> findBySportObjectAndReservationDate(SportObject sportObject, LocalDateTime creationDate);
     List<Reservation> findByUserEmail(String email);
+    List<Reservation> findByStatusName(String statusName);
 }
