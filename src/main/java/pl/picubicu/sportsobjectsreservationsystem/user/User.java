@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import pl.picubicu.sportsobjectsreservationsystem.address.Address;
 import pl.picubicu.sportsobjectsreservationsystem.auth.RegistrationDto;
 import pl.picubicu.sportsobjectsreservationsystem.reservation.Reservation;
+import pl.picubicu.sportsobjectsreservationsystem.user.role.Role;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

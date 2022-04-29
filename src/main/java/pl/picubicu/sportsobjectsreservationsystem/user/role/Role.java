@@ -1,8 +1,9 @@
-package pl.picubicu.sportsobjectsreservationsystem.user;
+package pl.picubicu.sportsobjectsreservationsystem.user.role;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.picubicu.sportsobjectsreservationsystem.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
