@@ -1,8 +1,10 @@
 package pl.picubicu.sportsobjectsreservationsystem.config;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import pl.picubicu.sportsobjectsreservationsystem.user.User;
 import pl.picubicu.sportsobjectsreservationsystem.user.role.Role;
 
@@ -10,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@RequiredArgsConstructor
-public class MyUserDetails implements org.springframework.security.core.userdetails.UserDetails {
+@Getter
+@AllArgsConstructor
+public class MyUserDetails implements UserDetails {
 
-    private final User user;
+    private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,17 +40,17 @@ public class MyUserDetails implements org.springframework.security.core.userdeta
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
