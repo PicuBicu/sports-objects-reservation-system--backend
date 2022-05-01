@@ -2,76 +2,67 @@ package pl.picubicu.sportsobjectsreservationsystem.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-import pl.picubicu.sportsobjectsreservationsystem.user.User;
-import pl.picubicu.sportsobjectsreservationsystem.user.UserRepository;
-import pl.picubicu.sportsobjectsreservationsystem.user.role.Role;
-import pl.picubicu.sportsobjectsreservationsystem.user.role.RoleRepository;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.management.relation.RoleNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Slf4j
 @RequiredArgsConstructor
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserRepository userRepository;
     private final MyUserDetailsService userDetailsService;
-    private final RoleRepository roleRepository;
+    private final JwtTokenFilter jwtTokenFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
+
+        httpSecurity.cors()
+                .and()
+                .csrf().disable();
+
+        httpSecurity = httpSecurity
+                .sessionManagement()
+                .sessionCreationPolicy(STATELESS)
+                .and();
+
+        httpSecurity = httpSecurity.
+                authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
+                .and();
+
+        httpSecurity.addFilterBefore(
+                jwtTokenFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
+
     }
 
     @Bean
-    public CommandLineRunner createAdminAccount() {
-        return args -> {
-            PasswordEncoder encoder = passwordEncoder();
-            String email = "admin@gmail.com";
-            String password = "zaq1@WSX";
-            Optional<User> user = userRepository.findByEmail(email);
-            if (user.isEmpty()) {
-                log.info("Created admin account with credentials email = {} password {}", email, password);
-                User admin = new User();
-                admin.setEmail(email);
-                admin.setPassword(encoder.encode(password));
-                Optional<Role> role = roleRepository.findByName("ROLE_ADMIN");
-                if (role.isEmpty()) {
-                    log.error("Role should already exists");
-                } else {
-                    admin.setRoles(List.of(role.get()));
-                    userRepository.save(admin);
-                }
-            } else {
-                log.info("Admin account already exists");
-            }
-        };
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean
