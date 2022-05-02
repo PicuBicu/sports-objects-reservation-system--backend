@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 import static pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage.USER_DELETED;
@@ -18,6 +19,7 @@ import static pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage.US
 @RequiredArgsConstructor
 @RequestMapping("api/user")
 @RestController
+@RolesAllowed(value = "ADMIN")
 public class UserController {
 
     private final UserService userService;
