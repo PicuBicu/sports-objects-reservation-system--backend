@@ -1,5 +1,6 @@
 package pl.picubicu.sportsobjectsreservationsystem.sportobject;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("api/sport-object")
