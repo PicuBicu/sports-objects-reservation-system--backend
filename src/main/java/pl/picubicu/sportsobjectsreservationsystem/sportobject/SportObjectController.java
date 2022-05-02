@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.picubicu.sportsobjectsreservationsystem.custom.CustomResponse;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class SportObjectController {
 
     private final SportObjectService sportObjectService;
 
+    @RolesAllowed(value = {"ADMIN"})
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/")
     public CustomResponse addSportObject(@Valid @RequestBody SportObjectDto sportObjectDto) {
@@ -35,6 +37,7 @@ public class SportObjectController {
         return new CustomResponse(message);
     }
 
+    @RolesAllowed(value = {"ADMIN"})
     @PutMapping("/{id}")
     public CustomResponse updateSportObject(@PathVariable Long id, @Valid @RequestBody SportObjectDto sportObjectDto) {
         log.info("Update {}", sportObjectDto.toString());
@@ -44,6 +47,7 @@ public class SportObjectController {
         return new CustomResponse(message);
     }
 
+    @RolesAllowed(value = {"ADMIN"})
     @DeleteMapping("/{id}")
     public CustomResponse deleteSportObject(@PathVariable("id") Long id) {
         log.info("Sport object id to be deleted {}", id);
