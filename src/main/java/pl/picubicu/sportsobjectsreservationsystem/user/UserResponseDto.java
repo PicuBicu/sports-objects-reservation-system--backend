@@ -6,12 +6,14 @@ import pl.picubicu.sportsobjectsreservationsystem.address.Address;
 import pl.picubicu.sportsobjectsreservationsystem.user.role.Role;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Builder
 @Data
 public class UserResponseDto {
 
+    private Date expiresAt;
     private String jwtToken;
     private String firstName;
     private String lastName;

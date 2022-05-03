@@ -84,7 +84,9 @@ public class AuthService {
             );
             MyUserDetails user = (MyUserDetails) authentication.getPrincipal();
             UserResponseDto userDto = UserResponseDto.fromUser(user.getUser());
-            userDto.setJwtToken(jwtTokenUtil.generateToken(user));
+            String token = jwtTokenUtil.generateToken(user);
+            userDto.setJwtToken(token);
+            userDto.setExpiresAt(jwtTokenUtil.getExpirationDateFromToken(token));
             return userDto;
         } catch (BadCredentialsException exception) {
             log.error(exception.getMessage());
