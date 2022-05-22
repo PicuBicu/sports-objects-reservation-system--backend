@@ -28,6 +28,12 @@ import static pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage.US
 public class UserController {
 
     private final UserService userService;
+    private final ReservationService reservationService;
+
+    @GetMapping("/{email}")
+    public UserResponseDto getUserByEmail(@PathVariable String email) {
+        return this.userService.getUserByEmail(email);
+    }
 
     @GetMapping("/")
     public List<UserResponseDto> getAllUsers() {
@@ -45,9 +51,11 @@ public class UserController {
         return this.userService.deleteUserByEmail(email);
     }
 
+//    todo: change to custom response
     @PutMapping("/")
     public String changeUserStatus(@RequestParam("email") String email,
                                    @RequestParam("isActivated") Boolean isActivated) {
+        log.info("Attempt to change activation status of user {}", email);
         return this.userService.changeUserStatusByEmail(email, isActivated);
     }
 
