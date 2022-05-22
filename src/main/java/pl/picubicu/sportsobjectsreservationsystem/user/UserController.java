@@ -3,6 +3,7 @@ package pl.picubicu.sportsobjectsreservationsystem.user;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.picubicu.sportsobjectsreservationsystem.reservation.Reservation;
+import pl.picubicu.sportsobjectsreservationsystem.reservation.ReservationService;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
@@ -46,5 +49,12 @@ public class UserController {
     public String changeUserStatus(@RequestParam("email") String email,
                                    @RequestParam("isActivated") Boolean isActivated) {
         return this.userService.changeUserStatusByEmail(email, isActivated);
+    }
+
+    @PreAuthorize(value = "#email == authentication.name and hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/{email}/reservations")
+    public List<Reservation> getUserReservations(@PathVariable String email) {
+        log.info("Fetch reservation for {}", email);
+        return reservationService.getUserReservations(email);
     }
 }

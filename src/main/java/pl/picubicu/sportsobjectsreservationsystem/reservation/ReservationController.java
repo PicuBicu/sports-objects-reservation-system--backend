@@ -47,13 +47,6 @@ public class ReservationController {
         return new CustomResponse("New status of reservation with id " + id + " is " + status);
     }
 
-    @PreAuthorize(value = "#email == authentication.name and hasRole('USER')")
-    @GetMapping("/user/{email}")
-    public List<Reservation> getUserReservations(@PathVariable String email) {
-        log.info("Fetch reservation for {}", email);
-        return reservationService.getUserReservations(email);
-    }
-
     @RolesAllowed(value = {"ADMIN"})
     @GetMapping("/status/{statusName}")
     public List<ReservationResponseDto> getReservationsWithStatus(@PathVariable String statusName) {
