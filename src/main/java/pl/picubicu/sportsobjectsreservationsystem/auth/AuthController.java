@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.picubicu.sportsobjectsreservationsystem.custom.CustomResponse;
+import pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage;
 import pl.picubicu.sportsobjectsreservationsystem.user.UserResponseDto;
 
 import javax.validation.Valid;
@@ -25,9 +26,9 @@ public class AuthController {
     @PostMapping("/sign-up")
     public CustomResponse signUp(@Valid @RequestBody RegistrationDto registrationDto) {
         log.info(registrationDto.toString());
-        String message = this.authService.signUp(registrationDto);
-        log.info(message);
-        return new CustomResponse(message);
+        this.authService.signUp(registrationDto);
+        log.info(SystemMessage.USER_CREATED);
+        return new CustomResponse(SystemMessage.USER_CREATED);
     }
 
     @PostMapping("/sign-in")

@@ -41,7 +41,7 @@ public class AuthService {
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
 
-    public String signUp(RegistrationDto registrationDto) {
+    public void signUp(RegistrationDto registrationDto) {
 
         Optional<User> foundUser = userRepository.findByEmail(registrationDto.getEmail());
         if (foundUser.isPresent()) {
@@ -70,8 +70,6 @@ public class AuthService {
                 .encode(registrationDto.getPassword()));
         newUser.setRoles(List.of(role.get()));
         userRepository.save(newUser);
-
-        return USER_CREATED;
     }
 
     public UserResponseDto signIn(String email, String password) {
