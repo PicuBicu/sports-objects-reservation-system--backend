@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 public class UserResponseDto {
 
     private Date expiresAt;
+//    todo: powinno zniknac przy pobieraniu uzytkowników przez admina
     private String jwtToken;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String email;
+    private Boolean isActivated;
     private Collection<String> role;
     private Address address;
 
@@ -28,6 +30,7 @@ public class UserResponseDto {
                 .lastName(user.getLastName())
                 .phoneNumber(user.getPhoneNumber())
                 .email(user.getEmail())
+                .isActivated(user.getIsActivated())
                 .role(user.getRoles()
                         .stream()
                         .map(Role::getName)
