@@ -6,7 +6,6 @@ import com.github.javafaker.service.RandomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.picubicu.sportsobjectsreservationsystem.address.Address;
 import pl.picubicu.sportsobjectsreservationsystem.user.role.Role;
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class TestUsersInitializer implements CommandLineRunner {
 
     private static final int NUM_OF_ACCOUNTS = 30;
-    private final String PASSWORD = "zaq1@WSX";
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -65,7 +63,7 @@ public class TestUsersInitializer implements CommandLineRunner {
                 .isActivated(true)
                 .phoneNumber("600472848")
                 .email("championello@gmail.com")
-                .password(passwordEncoder.encode("zaq1!@WSX"))
+                .password(passwordEncoder.encode("zaq1@WSX"))
                 .roles(roles)
                 .address(createRandomAddress(new Faker()))
                 .build());
@@ -82,7 +80,7 @@ public class TestUsersInitializer implements CommandLineRunner {
                 .isActivated(true)
                 .phoneNumber(fakeValuesService.regexify("[0-9]{7,9}"))
                 .address(createRandomAddress(faker))
-                .password(passwordEncoder.encode("zaq1!@WSX"))
+                .password(passwordEncoder.encode("zaq1@WSX"))
                 .roles(List.of(userRole))
                 .build();
     }
