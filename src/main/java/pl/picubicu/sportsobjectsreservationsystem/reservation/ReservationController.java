@@ -1,8 +1,10 @@
 package pl.picubicu.sportsobjectsreservationsystem.reservation;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.picubicu.sportsobjectsreservationsystem.custom.CustomResponse;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("api/reservation")
@@ -24,6 +28,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    @PreAuthorize(value = "#reservationDto.email == authentication.name and hasRole('USER')")
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping()
     public CustomResponse addReservation(@Valid @RequestBody ReservationDto reservationDto) {
@@ -33,6 +38,7 @@ public class ReservationController {
         return new CustomResponse("Reservation for " + reservationDto.getEmail() + " on " + reservationDto.getReservationDate());
     }
 
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('USER') and #status == 'REQUESTED' or #status == 'CANCELED' or #status == 'CONFIRMED'")
     @PutMapping("/{id}/status/{status}")
     public CustomResponse setReservationStatus(@PathVariable Long id, @PathVariable String status) {
         log.info("Changing reservation status for id {}", id);
@@ -41,12 +47,7 @@ public class ReservationController {
         return new CustomResponse("New status of reservation with id " + id + " is " + status);
     }
 
-    @GetMapping("/user/{email}")
-    public List<Reservation> getUserReservations(@PathVariable String email) {
-        log.info("Fetch reservation for {}", email);
-        return reservationService.getUserReservations(email);
-    }
-
+    @RolesAllowed(value = {"ADMIN"})
     @GetMapping("/status/{statusName}")
     public List<ReservationResponseDto> getReservationsWithStatus(@PathVariable String statusName) {
         log.info("Fetch reservation with status {}", statusName);

@@ -48,4 +48,13 @@ public class UserService {
                 .map(UserResponseDto::fromUser)
                 .collect(Collectors.toList());
     }
+
+    public UserResponseDto getUserByEmail(String email) {
+        Optional<User> user = this.userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return UserResponseDto.fromUser(user.get());
+        } else {
+             throw new UserNotFoundException(USER_NOT_FOUND);
+        }
+    }
 }
