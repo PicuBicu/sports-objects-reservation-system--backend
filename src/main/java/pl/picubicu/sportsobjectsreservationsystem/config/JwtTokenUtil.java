@@ -5,12 +5,16 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -46,12 +50,19 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
+    private List<String> getRoles(UserDetails userDetails) {
+        return userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+    }
+
     public String generateToken(UserDetails userDetails) {
         Claims claims = Jwts.claims();
+        claims.put("roles", getRoles(userDetails));
         return Jwts.builder()
                 .setClaims(claims)
+                .setIssuer("orlikowo")
                 .setSubject(userDetails.getUsername())
-                .setIssuer("me")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_VALUE * 1000))
                 .signWith(key)
