@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage.USER_ALREADY_EXISTS;
-import static pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage.USER_CREATED;
 import static pl.picubicu.sportsobjectsreservationsystem.custom.SystemMessage.USER_NOT_ACTIVATED;
 
 @Slf4j
@@ -80,6 +79,7 @@ public class AuthService {
                             password
                     )
             );
+
             MyUserDetails user = (MyUserDetails) authentication.getPrincipal();
             UserResponseDto userDto = UserResponseDto.fromUser(user.getUser());
             String token = jwtTokenUtil.generateToken(user);
