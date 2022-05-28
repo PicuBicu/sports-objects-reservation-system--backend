@@ -22,7 +22,7 @@ public class SportObjectService {
     private final CategoryRepository categoryRepository;
 
     public String addNewSportObject(SportObjectDto sportObjectDto) {
-        List<Category> categories = categoryRepository.findAllById(sportObjectDto.getCategoriesIds());
+        List<Category> categories = categoryRepository.findCategoryByNameIn(sportObjectDto.getCategories());
         log.info("Found categories {}", categories);
         if (!categories.isEmpty()) {
             Address newAddress = Address.fromSportObjectDto(sportObjectDto);
@@ -33,7 +33,7 @@ public class SportObjectService {
             sportObjectRepository.save(sportObject);
             return String.format("Sport object with name %s has been created", sportObjectDto.getName());
         }
-        throw new CategoryNotFoundException(String.format("There is no categories with given ids %s", sportObjectDto.getCategoriesIds()));
+        throw new CategoryNotFoundException(String.format("There is no categories with given ids %s", sportObjectDto.getCategories()));
     }
 
     public String deleteSportObjectById(Long id) {
@@ -73,10 +73,10 @@ public class SportObjectService {
             sportObject.getAddress().setLocalNumber(sportObjectDto.getLocalNumber());
             sportObject.getAddress().setStreetNumber(sportObjectDto.getStreetNumber());
             sportObject.getAddress().setCityName(sportObjectDto.getCityName());
-            List<Category> categories = categoryRepository.findAllById(sportObjectDto.getCategoriesIds());
+            List<Category> categories = categoryRepository.findCategoryByNameIn(sportObjectDto.getCategories());
             if (categories.isEmpty()) {
                 throw new CategoryNotFoundException("There is not categories with given ids = " +
-                        sportObjectDto.getCategoriesIds());
+                        sportObjectDto.getCategories());
             }
             sportObject.setCategories(new HashSet<>(categories));
             return sportObject;

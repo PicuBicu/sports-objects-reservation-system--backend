@@ -25,5 +25,5 @@ public class SportObjectDto {
     @NotBlank(message = "City name cannot be empty")
     private String cityName;
     @NotNull(message = "At least one category must be selected for sport object")
-    private Set<Long> categoriesIds;
+    private Set<String> categories;
 }
