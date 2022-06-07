@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.picubicu.sportsobjectsreservationsystem.custom.CustomResponse;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
@@ -27,13 +28,13 @@ public class CategoryController {
 
     @RolesAllowed(value = {"ADMIN"})
     @PostMapping()
-    public String addCategory(@RequestParam String categoryName) {
-        return this.categoryService.addNewCategory(categoryName);
+    public CustomResponse addCategory(@RequestParam String categoryName) {
+        return new CustomResponse(this.categoryService.addNewCategory(categoryName));
     }
 
     @RolesAllowed(value = {"ADMIN"})
     @DeleteMapping()
-    public String deleteCategory(@RequestParam String categoryName) {
-        return this.categoryService.deleteCategory(categoryName);
+    public CustomResponse deleteCategory(@RequestParam String categoryName) {
+        return new CustomResponse(this.categoryService.deleteCategory(categoryName));
     }
 }
