@@ -30,6 +30,7 @@ public class UserController {
     private final UserService userService;
     private final ReservationService reservationService;
 
+    @PreAuthorize(value = "hasRole('ADMIN') or hasRole('USER') and #email == authentication.name")
     @GetMapping("/{email}")
     public UserResponseDto getUserByEmail(@PathVariable String email) {
         return this.userService.getUserByEmail(email);
