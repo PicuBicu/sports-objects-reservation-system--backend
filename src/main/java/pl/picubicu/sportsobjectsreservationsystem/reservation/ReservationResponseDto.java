@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 public class ReservationResponseDto {
     private Long id;
-    private User user;
+    private String email;
     private ReservationStatus status;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -27,17 +27,17 @@ public class ReservationResponseDto {
     private LocalDateTime reservationDate;
 
     private Integer numOfUsers;
-    private SportObject sportObject;
+    private Long sportObjectId;
 
     public static ReservationResponseDto fromReservation(Reservation reservation) {
         return ReservationResponseDto.builder()
                 .id(reservation.getId())
-                .user(reservation.getUser())
+                .email(reservation.getUser().getEmail())
                 .status(reservation.getStatus())
                 .creationDate(reservation.getCreationDate())
                 .reservationDate(reservation.getReservationDate())
                 .numOfUsers(reservation.getNumOfUsers())
-                .sportObject(reservation.getSportObject())
+                .sportObjectId(reservation.getSportObject().getId())
                 .build();
     }
 }
