@@ -1,6 +1,7 @@
 package pl.picubicu.sportsobjectsreservationsystem.reservation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pl.picubicu.sportsobjectsreservationsystem.sportobject.SportObject;
@@ -10,11 +11,14 @@ import pl.picubicu.sportsobjectsreservationsystem.user.User;
 import pl.picubicu.sportsobjectsreservationsystem.user.UserNotFoundException;
 import pl.picubicu.sportsobjectsreservationsystem.user.UserRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ReservationService {
@@ -71,6 +75,7 @@ public class ReservationService {
         Optional<Reservation> optReservation = reservationRepository.findById(id);
         optReservation.ifPresentOrElse(reservation -> {
             statusRepository.findByName(status).ifPresent(reservation::setStatus);
+            reservationRepository.save(reservation);
         }, () -> {
             throw new ReservationNotFound("There is no reservation with id " + id);
         });
