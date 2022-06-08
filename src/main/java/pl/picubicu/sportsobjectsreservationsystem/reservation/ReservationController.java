@@ -3,6 +3,7 @@ package pl.picubicu.sportsobjectsreservationsystem.reservation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import pl.picubicu.sportsobjectsreservationsystem.custom.CustomResponse;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SecurityRequirement(name = "bearerAuth")
@@ -52,5 +55,12 @@ public class ReservationController {
     public List<ReservationResponseDto> getReservationsWithStatus(@PathVariable String statusName) {
         log.info("Fetch reservation with status {}", statusName);
         return reservationService.getReservationsByStatus(statusName);
+    }
+
+    @RolesAllowed(value = {"ADMIN"})
+    @GetMapping("/status/")
+    public List<ReservationStatus> getReservationStatuses() {
+        log.info("Fetching reservation statuses");
+        return reservationService.getReservationStatuses();
     }
 }

@@ -2,7 +2,6 @@ package pl.picubicu.sportsobjectsreservationsystem.reservation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pl.picubicu.sportsobjectsreservationsystem.sportobject.SportObject;
 import pl.picubicu.sportsobjectsreservationsystem.sportobject.SportObjectNotFoundException;
@@ -11,8 +10,6 @@ import pl.picubicu.sportsobjectsreservationsystem.user.User;
 import pl.picubicu.sportsobjectsreservationsystem.user.UserNotFoundException;
 import pl.picubicu.sportsobjectsreservationsystem.user.UserRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -99,5 +96,9 @@ public class ReservationService {
                     .collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    public List<ReservationStatus> getReservationStatuses() {
+        return this.statusRepository.findAll();
     }
 }

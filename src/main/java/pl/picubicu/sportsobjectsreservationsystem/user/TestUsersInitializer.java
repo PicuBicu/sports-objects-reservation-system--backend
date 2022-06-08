@@ -61,7 +61,7 @@ public class TestUsersInitializer implements CommandLineRunner {
                 .firstName("Piotr")
                 .lastName("Błasiak")
                 .isActivated(true)
-                .phoneNumber("600472848")
+                .phoneNumber("111222333")
                 .email("championello@gmail.com")
                 .password(passwordEncoder.encode("zaq1@WSX"))
                 .roles(roles)
